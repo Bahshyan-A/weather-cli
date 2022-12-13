@@ -1,13 +1,19 @@
 #!/usr/bin/env node
 import { CommandsCLI} from "./helpers/commands.js";
+import { Logger } from "./services/logger.service.js";
 class WeatherCLI {
-    constructor(commands){
-        this.commands = commands
+    constructor(commands, logger){
+        this.commands = commands;
+        this.logger = logger;
     }
 
     init() {
         const args = this.commands.getArgs()
-        console.log(args)
+        if(args.h){
+            Logger.printHelp();
+        }
+        if(args.s){
+        }
     }
 }
 
