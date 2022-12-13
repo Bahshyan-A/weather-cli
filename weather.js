@@ -1,9 +1,17 @@
 #!/usr/bin/env node
 import { CommandsCLI} from "./helpers/args.js";
-const initCLI = () => {
-    const commands = new CommandsCLI(process.argv);
-    const args = commands.getArgs()
-    console.log(args)
-}
+class WeatherCLI {
+    constructor(commands){
+        this.commands = commands
+    }
 
-initCLI();
+    init() {
+        const args = this.commands.getArgs()
+        console.log(args)
+    }
+}
+const Commands = new CommandsCLI(process.argv);
+const Weather  = new WeatherCLI(Commands);
+
+
+Weather.init();
