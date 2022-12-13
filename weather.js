@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { CommandsCLI} from "./helpers/args.js";
+import { CommandsCLI} from "./helpers/commands.js";
 class WeatherCLI {
     constructor(commands){
         this.commands = commands
@@ -10,6 +10,7 @@ class WeatherCLI {
         console.log(args)
     }
 }
+
 const Commands = new CommandsCLI(process.argv);
 const Weather  = new WeatherCLI(Commands);
 
