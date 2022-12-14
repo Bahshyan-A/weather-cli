@@ -1,11 +1,13 @@
 #!/usr/bin/env node
+import { WeatherAPI } from "./services/api.service.js";
 import { CommandsCLI } from "./services/commands.service.js";
 import { LoggerCLI, colors } from "./services/logger.service.js";
 import { Storage } from "./services/storage.service.js";
 class WeatherCLI {
-  constructor(commands, logger) {
+  constructor(commands, logger, api) {
     this.commands = commands;
     this.logger = logger;
+    this.api = api;
   }
 
   init() {
@@ -14,6 +16,7 @@ class WeatherCLI {
     if (args.h) {
       this.logger.printHelp();
     } else if (args.s) {
+      this.api.getCityWeather(args.s);
     } else if (args.t) {
       return this.saveToken(args.t);
     } else {
@@ -31,8 +34,18 @@ class WeatherCLI {
     }
   }
 }
-const Logger = new LoggerCLI(colors);
-const Commands = new CommandsCLI(process.argv);
-const Weather = new WeatherCLI(Commands, Logger);
 
-Weather.init();
+async function initCLI() {
+  const Logger = new LoggerCLI(colors);
+  const Commands = new CommandsCLI(process.argv);
+
+  const apiKey = await Storage.getKeyValue('token');
+  const API = new WeatherAPI(apiKey);
+  
+  const Weather = new WeatherCLI(Commands, Logger, API);
+
+  Weather.init();
+}
+
+
+initCLI();

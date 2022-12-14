@@ -5,7 +5,7 @@ import { promises } from "fs";
 const filePath = join(homedir(), "weather-data.json");
 
 class StorageCLI {
-  data = {};
+  #data = {};
 
   constructor(filePath) {
     this.filePath = filePath;
@@ -20,11 +20,11 @@ class StorageCLI {
 
       if (fileExist) {
         const file = await promises.readFile(this.filePath);
-        this.data = JSON.parse(file);
+        this.#data = JSON.parse(file);
       }
 
-      this.data[key] = value;
-      await promises.writeFile(this.filePath, JSON.stringify(this.data));
+      this.#data[key] = value;
+      await promises.writeFile(this.filePath, JSON.stringify(this.#data));
   };
 
   isExist = async () => {
@@ -36,14 +36,15 @@ class StorageCLI {
     }
   };
 
-  // getKeyValue = async (key) => {
-  //     if(await isExist(filePath)){
-  //         const file = await promises.readFile(filePath);
-  //         const data = JSON.parse(file);
-  //         return data[key];
-  //     }
-  //     return undefined;
-  // }
+  getKeyValue = async (key) => {
+    const fileExist = await this.isExist();
+      if(fileExist){
+          const file = await promises.readFile(filePath);
+          const obj = JSON.parse(file);
+          return obj[key];
+      }
+      return undefined;
+  }
 }
 
 const Storage = new StorageCLI(filePath);
